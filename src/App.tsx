@@ -35,11 +35,14 @@ class App extends Component<Props, State> {
         </div>
         <div className='preview-container'>
           {
-            classesText.split('\n').map((classText) => {
+            classesText.split('\n').map((classText, index) => {
               if (!classText) return null
 
               return (
-                <input type='text' className={classText} />
+                <div key={`${classText}-${index}`}>
+                  <label>class="{classText}"</label>
+                  <input type='text' className={classText} />
+                </div>
               )
             })
           }
