@@ -22,7 +22,12 @@ class App extends Component<Props, State> {
   onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.currentTarget
     this.setState({classesText: value})
-    window.history.replaceState({}, '', "/?q=" + value.split('\n').join(','))
+    if (value) {
+      window.history.replaceState({}, '', '/?q=' + value.split('\n').join(','))
+    } else {
+      window.history.replaceState({}, '', '/')
+    }
+
   }
 
   render () {
