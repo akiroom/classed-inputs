@@ -1,26 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {ChangeEvent, Component} from 'react';
+import './App.scss';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface Props {}
+interface State {
+  classesText: string
+}
+
+class App extends Component<Props, State> {
+  state: State = {
+    classesText: ''
+  }
+
+  constructor (props: Props) {
+    super(props)
+    const q = new URLSearchParams(window.location.search).get('q')
+    if (q) {
+      this.state.classesText = q.split(',').join('\n')
+    }
+  }
+
+  onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.currentTarget
+    this.setState({classesText: value})
+    window.history.replaceState({}, '', "/?q=" + value.split('\n').join(','))
+  }
+
+  render () {
+    const {classesText} = this.state
+    return (
+      <div className="App">
+        <div className='settings'>
+          <h2>ClassNames for Inputs</h2>
+          <textarea value={classesText} onChange={this.onChange}></textarea>
+        </div>
+        <div className='preview-container'>
+          {
+            classesText.split('\n').map((classText) => {
+              if (!classText) return null
+
+              return (
+                <input type='text' className={classText} />
+              )
+            })
+          }
+        </div>
+      </div>
+    )
+  }
 }
 
 export default App;
